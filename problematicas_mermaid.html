@@ -1,0 +1,67 @@
+<html>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+    <h5>Problematica 01</h5>
+    <div class="mermaid">
+
+        classDiagram
+        class Cliente
+        Cliente : +String nombre
+        class Turno
+        Turno : +DateTime fecha
+        class Empresa
+        Empresa : +String nombre
+        class Empleado
+        Empleado : +String nombre
+        Empleado : +String identificacion
+
+
+        Cliente "1" --> "*" Turno
+        Cliente "1" --> "1" Empresa
+        Turno "1" --> "1" Empleado
+        Empleado "1" --> "1" Empresa
+    </div>
+
+    <h5>Problematica 02</h5>
+    <div class="mermaid">
+
+        classDiagram
+        class Acto
+        Acto : +String nombre
+        Acto : +String lugar
+        Acto : +DateTime fecha
+        Acto : +Costo costo
+        class Empresa
+        Empresa : +String nombre
+        Empresa : +String identificacion
+        class Supervisor
+        Supervisor : +String identificacion
+
+        Supervisor "1" --> "*" Acto
+        Acto "1" --> "1" Empresa
+    </div>
+
+    <h5>Problematica 03</h5>
+    <div class="mermaid">
+
+        classDiagram
+        class Cliente
+        Cliente : +String nombre
+        class Medidor
+        Medidor : +String marca
+        Medidor : +String direccion
+        Medidor : +Decimal costo
+        class Municipo
+        Municipo : +String nombre
+
+
+        Cliente "1" --> "*" Medidor
+        Cliente "1" --> "1" Municipo
+        Medidor "1" --> "1" Municipo
+    </div>
+</body>
+</html>

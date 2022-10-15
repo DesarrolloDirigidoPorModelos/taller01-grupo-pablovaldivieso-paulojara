@@ -1,0 +1,545 @@
+//%% NEW FILE Empleado BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+
+// line 17 "model.ump"
+// line 43 "model.ump"
+public class Empleado
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Empleado Attributes
+  private string identificacion;
+  private string nombre;
+
+  //Empleado Associations
+  private Empresa empresa;
+  private Turno turno;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Empleado(string aIdentificacion, string aNombre, Empresa aEmpresa, Turno aTurno)
+  {
+    identificacion = aIdentificacion;
+    nombre = aNombre;
+    if (aEmpresa == null || aEmpresa.getEmpleado() != null)
+    {
+      throw new RuntimeException("Unable to create Empleado due to aEmpresa. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empresa = aEmpresa;
+    if (aTurno == null || aTurno.getEmpleado() != null)
+    {
+      throw new RuntimeException("Unable to create Empleado due to aTurno. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    turno = aTurno;
+  }
+
+  public Empleado(string aIdentificacion, string aNombre, string aNombreForEmpresa, Cliente aClienteForEmpresa, datetime aFechaForTurno, Cliente aClienteForTurno)
+  {
+    identificacion = aIdentificacion;
+    nombre = aNombre;
+    empresa = new Empresa(aNombreForEmpresa, aClienteForEmpresa, this);
+    turno = new Turno(aFechaForTurno, aClienteForTurno, this);
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setIdentificacion(string aIdentificacion)
+  {
+    boolean wasSet = false;
+    identificacion = aIdentificacion;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getIdentificacion()
+  {
+    return identificacion;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetOne */
+  public Empresa getEmpresa()
+  {
+    return empresa;
+  }
+  /* Code from template association_GetOne */
+  public Turno getTurno()
+  {
+    return turno;
+  }
+
+  public void delete()
+  {
+    Empresa existingEmpresa = empresa;
+    empresa = null;
+    if (existingEmpresa != null)
+    {
+      existingEmpresa.delete();
+    }
+    Turno existingTurno = turno;
+    turno = null;
+    if (existingTurno != null)
+    {
+      existingTurno.delete();
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "identificacion" + "=" + (getIdentificacion() != null ? !getIdentificacion().equals(this)  ? getIdentificacion().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "empresa = "+(getEmpresa()!=null?Integer.toHexString(System.identityHashCode(getEmpresa())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "turno = "+(getTurno()!=null?Integer.toHexString(System.identityHashCode(getTurno())):"null");
+  }
+}
+
+
+
+//%% NEW FILE Turno BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+
+// line 9 "model.ump"
+// line 33 "model.ump"
+public class Turno
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Turno Attributes
+  private datetime fecha;
+
+  //Turno Associations
+  private Cliente cliente;
+  private Empleado empleado;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Turno(datetime aFecha, Cliente aCliente, Empleado aEmpleado)
+  {
+    fecha = aFecha;
+    boolean didAddCliente = setCliente(aCliente);
+    if (!didAddCliente)
+    {
+      throw new RuntimeException("Unable to create turno due to cliente. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    if (aEmpleado == null || aEmpleado.getTurno() != null)
+    {
+      throw new RuntimeException("Unable to create Turno due to aEmpleado. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empleado = aEmpleado;
+  }
+
+  public Turno(datetime aFecha, Cliente aCliente, string aIdentificacionForEmpleado, string aNombreForEmpleado, Empresa aEmpresaForEmpleado)
+  {
+    fecha = aFecha;
+    boolean didAddCliente = setCliente(aCliente);
+    if (!didAddCliente)
+    {
+      throw new RuntimeException("Unable to create turno due to cliente. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empleado = new Empleado(aIdentificacionForEmpleado, aNombreForEmpleado, aEmpresaForEmpleado, this);
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setFecha(datetime aFecha)
+  {
+    boolean wasSet = false;
+    fecha = aFecha;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public datetime getFecha()
+  {
+    return fecha;
+  }
+  /* Code from template association_GetOne */
+  public Cliente getCliente()
+  {
+    return cliente;
+  }
+  /* Code from template association_GetOne */
+  public Empleado getEmpleado()
+  {
+    return empleado;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setCliente(Cliente aCliente)
+  {
+    boolean wasSet = false;
+    if (aCliente == null)
+    {
+      return wasSet;
+    }
+
+    Cliente existingCliente = cliente;
+    cliente = aCliente;
+    if (existingCliente != null && !existingCliente.equals(aCliente))
+    {
+      existingCliente.removeTurno(this);
+    }
+    cliente.addTurno(this);
+    wasSet = true;
+    return wasSet;
+  }
+
+  public void delete()
+  {
+    Cliente placeholderCliente = cliente;
+    this.cliente = null;
+    if(placeholderCliente != null)
+    {
+      placeholderCliente.removeTurno(this);
+    }
+    Empleado existingEmpleado = empleado;
+    empleado = null;
+    if (existingEmpleado != null)
+    {
+      existingEmpleado.delete();
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "fecha" + "=" + (getFecha() != null ? !getFecha().equals(this)  ? getFecha().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "cliente = "+(getCliente()!=null?Integer.toHexString(System.identityHashCode(getCliente())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "empleado = "+(getEmpleado()!=null?Integer.toHexString(System.identityHashCode(getEmpleado())):"null");
+  }
+}
+
+
+
+//%% NEW FILE Empresa BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+
+// line 13 "model.ump"
+// line 38 "model.ump"
+public class Empresa
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Empresa Attributes
+  private string nombre;
+
+  //Empresa Associations
+  private Cliente cliente;
+  private Empleado empleado;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Empresa(string aNombre, Cliente aCliente, Empleado aEmpleado)
+  {
+    nombre = aNombre;
+    if (aCliente == null || aCliente.getEmpresa() != null)
+    {
+      throw new RuntimeException("Unable to create Empresa due to aCliente. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    cliente = aCliente;
+    if (aEmpleado == null || aEmpleado.getEmpresa() != null)
+    {
+      throw new RuntimeException("Unable to create Empresa due to aEmpleado. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empleado = aEmpleado;
+  }
+
+  public Empresa(string aNombre, string aNombreForCliente, string aIdentificacionForEmpleado, string aNombreForEmpleado, Turno aTurnoForEmpleado)
+  {
+    nombre = aNombre;
+    cliente = new Cliente(aNombreForCliente, this);
+    empleado = new Empleado(aIdentificacionForEmpleado, aNombreForEmpleado, this, aTurnoForEmpleado);
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetOne */
+  public Cliente getCliente()
+  {
+    return cliente;
+  }
+  /* Code from template association_GetOne */
+  public Empleado getEmpleado()
+  {
+    return empleado;
+  }
+
+  public void delete()
+  {
+    Cliente existingCliente = cliente;
+    cliente = null;
+    if (existingCliente != null)
+    {
+      existingCliente.delete();
+    }
+    Empleado existingEmpleado = empleado;
+    empleado = null;
+    if (existingEmpleado != null)
+    {
+      existingEmpleado.delete();
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "cliente = "+(getCliente()!=null?Integer.toHexString(System.identityHashCode(getCliente())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "empleado = "+(getEmpleado()!=null?Integer.toHexString(System.identityHashCode(getEmpleado())):"null");
+  }
+}
+
+
+
+//%% NEW FILE Cliente BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+import java.util.*;
+
+// line 2 "model.ump"
+// line 28 "model.ump"
+public class Cliente
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Cliente Attributes
+  private string nombre;
+
+  //Cliente Associations
+  private Empresa empresa;
+  private List<Turno> turnos;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Cliente(string aNombre, Empresa aEmpresa)
+  {
+    nombre = aNombre;
+    if (aEmpresa == null || aEmpresa.getCliente() != null)
+    {
+      throw new RuntimeException("Unable to create Cliente due to aEmpresa. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empresa = aEmpresa;
+    turnos = new ArrayList<Turno>();
+  }
+
+  public Cliente(string aNombre, string aNombreForEmpresa, Empleado aEmpleadoForEmpresa)
+  {
+    nombre = aNombre;
+    empresa = new Empresa(aNombreForEmpresa, this, aEmpleadoForEmpresa);
+    turnos = new ArrayList<Turno>();
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetOne */
+  public Empresa getEmpresa()
+  {
+    return empresa;
+  }
+  /* Code from template association_GetMany */
+  public Turno getTurno(int index)
+  {
+    Turno aTurno = turnos.get(index);
+    return aTurno;
+  }
+
+  public List<Turno> getTurnos()
+  {
+    List<Turno> newTurnos = Collections.unmodifiableList(turnos);
+    return newTurnos;
+  }
+
+  public int numberOfTurnos()
+  {
+    int number = turnos.size();
+    return number;
+  }
+
+  public boolean hasTurnos()
+  {
+    boolean has = turnos.size() > 0;
+    return has;
+  }
+
+  public int indexOfTurno(Turno aTurno)
+  {
+    int index = turnos.indexOf(aTurno);
+    return index;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfTurnos()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public Turno addTurno(datetime aFecha, Empleado aEmpleado)
+  {
+    return new Turno(aFecha, this, aEmpleado);
+  }
+
+  public boolean addTurno(Turno aTurno)
+  {
+    boolean wasAdded = false;
+    if (turnos.contains(aTurno)) { return false; }
+    Cliente existingCliente = aTurno.getCliente();
+    boolean isNewCliente = existingCliente != null && !this.equals(existingCliente);
+    if (isNewCliente)
+    {
+      aTurno.setCliente(this);
+    }
+    else
+    {
+      turnos.add(aTurno);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeTurno(Turno aTurno)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aTurno, as it must always have a cliente
+    if (!this.equals(aTurno.getCliente()))
+    {
+      turnos.remove(aTurno);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addTurnoAt(Turno aTurno, int index)
+  {  
+    boolean wasAdded = false;
+    if(addTurno(aTurno))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTurnos()) { index = numberOfTurnos() - 1; }
+      turnos.remove(aTurno);
+      turnos.add(index, aTurno);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveTurnoAt(Turno aTurno, int index)
+  {
+    boolean wasAdded = false;
+    if(turnos.contains(aTurno))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTurnos()) { index = numberOfTurnos() - 1; }
+      turnos.remove(aTurno);
+      turnos.add(index, aTurno);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addTurnoAt(aTurno, index);
+    }
+    return wasAdded;
+  }
+
+  public void delete()
+  {
+    Empresa existingEmpresa = empresa;
+    empresa = null;
+    if (existingEmpresa != null)
+    {
+      existingEmpresa.delete();
+    }
+    for(int i=turnos.size(); i > 0; i--)
+    {
+      Turno aTurno = turnos.get(i - 1);
+      aTurno.delete();
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "empresa = "+(getEmpresa()!=null?Integer.toHexString(System.identityHashCode(getEmpresa())):"null");
+  }
+}

@@ -1,0 +1,747 @@
+//%% NEW FILE Municipio BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+import java.util.*;
+
+// line 15 "model.ump"
+// line 33 "model.ump"
+public class Municipio
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Municipio Attributes
+  private string nombre;
+
+  //Municipio Associations
+  private List<Cliente> clientes;
+  private List<Medidor> medidors;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Municipio(string aNombre)
+  {
+    nombre = aNombre;
+    clientes = new ArrayList<Cliente>();
+    medidors = new ArrayList<Medidor>();
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetMany */
+  public Cliente getCliente(int index)
+  {
+    Cliente aCliente = clientes.get(index);
+    return aCliente;
+  }
+
+  public List<Cliente> getClientes()
+  {
+    List<Cliente> newClientes = Collections.unmodifiableList(clientes);
+    return newClientes;
+  }
+
+  public int numberOfClientes()
+  {
+    int number = clientes.size();
+    return number;
+  }
+
+  public boolean hasClientes()
+  {
+    boolean has = clientes.size() > 0;
+    return has;
+  }
+
+  public int indexOfCliente(Cliente aCliente)
+  {
+    int index = clientes.indexOf(aCliente);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public Medidor getMedidor(int index)
+  {
+    Medidor aMedidor = medidors.get(index);
+    return aMedidor;
+  }
+
+  public List<Medidor> getMedidors()
+  {
+    List<Medidor> newMedidors = Collections.unmodifiableList(medidors);
+    return newMedidors;
+  }
+
+  public int numberOfMedidors()
+  {
+    int number = medidors.size();
+    return number;
+  }
+
+  public boolean hasMedidors()
+  {
+    boolean has = medidors.size() > 0;
+    return has;
+  }
+
+  public int indexOfMedidor(Medidor aMedidor)
+  {
+    int index = medidors.indexOf(aMedidor);
+    return index;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfClientes()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public Cliente addCliente(string aNombre)
+  {
+    return new Cliente(aNombre, this);
+  }
+
+  public boolean addCliente(Cliente aCliente)
+  {
+    boolean wasAdded = false;
+    if (clientes.contains(aCliente)) { return false; }
+    Municipio existingMunicipio = aCliente.getMunicipio();
+    boolean isNewMunicipio = existingMunicipio != null && !this.equals(existingMunicipio);
+    if (isNewMunicipio)
+    {
+      aCliente.setMunicipio(this);
+    }
+    else
+    {
+      clientes.add(aCliente);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeCliente(Cliente aCliente)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aCliente, as it must always have a municipio
+    if (!this.equals(aCliente.getMunicipio()))
+    {
+      clientes.remove(aCliente);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addClienteAt(Cliente aCliente, int index)
+  {  
+    boolean wasAdded = false;
+    if(addCliente(aCliente))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfClientes()) { index = numberOfClientes() - 1; }
+      clientes.remove(aCliente);
+      clientes.add(index, aCliente);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveClienteAt(Cliente aCliente, int index)
+  {
+    boolean wasAdded = false;
+    if(clientes.contains(aCliente))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfClientes()) { index = numberOfClientes() - 1; }
+      clientes.remove(aCliente);
+      clientes.add(index, aCliente);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addClienteAt(aCliente, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfMedidors()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addMedidor(Medidor aMedidor)
+  {
+    boolean wasAdded = false;
+    if (medidors.contains(aMedidor)) { return false; }
+    medidors.add(aMedidor);
+    if (aMedidor.indexOfMunicipio(this) != -1)
+    {
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aMedidor.addMunicipio(this);
+      if (!wasAdded)
+      {
+        medidors.remove(aMedidor);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeMedidor(Medidor aMedidor)
+  {
+    boolean wasRemoved = false;
+    if (!medidors.contains(aMedidor))
+    {
+      return wasRemoved;
+    }
+
+    int oldIndex = medidors.indexOf(aMedidor);
+    medidors.remove(oldIndex);
+    if (aMedidor.indexOfMunicipio(this) == -1)
+    {
+      wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aMedidor.removeMunicipio(this);
+      if (!wasRemoved)
+      {
+        medidors.add(oldIndex,aMedidor);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addMedidorAt(Medidor aMedidor, int index)
+  {  
+    boolean wasAdded = false;
+    if(addMedidor(aMedidor))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMedidors()) { index = numberOfMedidors() - 1; }
+      medidors.remove(aMedidor);
+      medidors.add(index, aMedidor);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveMedidorAt(Medidor aMedidor, int index)
+  {
+    boolean wasAdded = false;
+    if(medidors.contains(aMedidor))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMedidors()) { index = numberOfMedidors() - 1; }
+      medidors.remove(aMedidor);
+      medidors.add(index, aMedidor);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addMedidorAt(aMedidor, index);
+    }
+    return wasAdded;
+  }
+
+  public void delete()
+  {
+    for(int i=clientes.size(); i > 0; i--)
+    {
+      Cliente aCliente = clientes.get(i - 1);
+      aCliente.delete();
+    }
+    ArrayList<Medidor> copyOfMedidors = new ArrayList<Medidor>(medidors);
+    medidors.clear();
+    for(Medidor aMedidor : copyOfMedidors)
+    {
+      aMedidor.removeMunicipio(this);
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null");
+  }
+}
+
+
+
+//%% NEW FILE Medidor BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+import java.util.*;
+
+// line 8 "model.ump"
+// line 27 "model.ump"
+public class Medidor
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Medidor Attributes
+  private string marca;
+  private string direccion;
+  private decimal costo;
+
+  //Medidor Associations
+  private List<Municipio> municipios;
+  private Cliente cliente;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Medidor(string aMarca, string aDireccion, decimal aCosto, Cliente aCliente)
+  {
+    marca = aMarca;
+    direccion = aDireccion;
+    costo = aCosto;
+    municipios = new ArrayList<Municipio>();
+    boolean didAddCliente = setCliente(aCliente);
+    if (!didAddCliente)
+    {
+      throw new RuntimeException("Unable to create medidor due to cliente. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setMarca(string aMarca)
+  {
+    boolean wasSet = false;
+    marca = aMarca;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDireccion(string aDireccion)
+  {
+    boolean wasSet = false;
+    direccion = aDireccion;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setCosto(decimal aCosto)
+  {
+    boolean wasSet = false;
+    costo = aCosto;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getMarca()
+  {
+    return marca;
+  }
+
+  public string getDireccion()
+  {
+    return direccion;
+  }
+
+  public decimal getCosto()
+  {
+    return costo;
+  }
+  /* Code from template association_GetMany */
+  public Municipio getMunicipio(int index)
+  {
+    Municipio aMunicipio = municipios.get(index);
+    return aMunicipio;
+  }
+
+  public List<Municipio> getMunicipios()
+  {
+    List<Municipio> newMunicipios = Collections.unmodifiableList(municipios);
+    return newMunicipios;
+  }
+
+  public int numberOfMunicipios()
+  {
+    int number = municipios.size();
+    return number;
+  }
+
+  public boolean hasMunicipios()
+  {
+    boolean has = municipios.size() > 0;
+    return has;
+  }
+
+  public int indexOfMunicipio(Municipio aMunicipio)
+  {
+    int index = municipios.indexOf(aMunicipio);
+    return index;
+  }
+  /* Code from template association_GetOne */
+  public Cliente getCliente()
+  {
+    return cliente;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfMunicipios()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addMunicipio(Municipio aMunicipio)
+  {
+    boolean wasAdded = false;
+    if (municipios.contains(aMunicipio)) { return false; }
+    municipios.add(aMunicipio);
+    if (aMunicipio.indexOfMedidor(this) != -1)
+    {
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aMunicipio.addMedidor(this);
+      if (!wasAdded)
+      {
+        municipios.remove(aMunicipio);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeMunicipio(Municipio aMunicipio)
+  {
+    boolean wasRemoved = false;
+    if (!municipios.contains(aMunicipio))
+    {
+      return wasRemoved;
+    }
+
+    int oldIndex = municipios.indexOf(aMunicipio);
+    municipios.remove(oldIndex);
+    if (aMunicipio.indexOfMedidor(this) == -1)
+    {
+      wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aMunicipio.removeMedidor(this);
+      if (!wasRemoved)
+      {
+        municipios.add(oldIndex,aMunicipio);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addMunicipioAt(Municipio aMunicipio, int index)
+  {  
+    boolean wasAdded = false;
+    if(addMunicipio(aMunicipio))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMunicipios()) { index = numberOfMunicipios() - 1; }
+      municipios.remove(aMunicipio);
+      municipios.add(index, aMunicipio);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveMunicipioAt(Municipio aMunicipio, int index)
+  {
+    boolean wasAdded = false;
+    if(municipios.contains(aMunicipio))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMunicipios()) { index = numberOfMunicipios() - 1; }
+      municipios.remove(aMunicipio);
+      municipios.add(index, aMunicipio);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addMunicipioAt(aMunicipio, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setCliente(Cliente aCliente)
+  {
+    boolean wasSet = false;
+    if (aCliente == null)
+    {
+      return wasSet;
+    }
+
+    Cliente existingCliente = cliente;
+    cliente = aCliente;
+    if (existingCliente != null && !existingCliente.equals(aCliente))
+    {
+      existingCliente.removeMedidor(this);
+    }
+    cliente.addMedidor(this);
+    wasSet = true;
+    return wasSet;
+  }
+
+  public void delete()
+  {
+    ArrayList<Municipio> copyOfMunicipios = new ArrayList<Municipio>(municipios);
+    municipios.clear();
+    for(Municipio aMunicipio : copyOfMunicipios)
+    {
+      aMunicipio.removeMedidor(this);
+    }
+    Cliente placeholderCliente = cliente;
+    this.cliente = null;
+    if(placeholderCliente != null)
+    {
+      placeholderCliente.removeMedidor(this);
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "marca" + "=" + (getMarca() != null ? !getMarca().equals(this)  ? getMarca().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "direccion" + "=" + (getDireccion() != null ? !getDireccion().equals(this)  ? getDireccion().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "costo" + "=" + (getCosto() != null ? !getCosto().equals(this)  ? getCosto().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "cliente = "+(getCliente()!=null?Integer.toHexString(System.identityHashCode(getCliente())):"null");
+  }
+}
+
+
+
+//%% NEW FILE Cliente BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+import java.util.*;
+
+// line 2 "model.ump"
+// line 22 "model.ump"
+public class Cliente
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Cliente Attributes
+  private string nombre;
+
+  //Cliente Associations
+  private Municipio municipio;
+  private List<Medidor> medidors;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Cliente(string aNombre, Municipio aMunicipio)
+  {
+    nombre = aNombre;
+    boolean didAddMunicipio = setMunicipio(aMunicipio);
+    if (!didAddMunicipio)
+    {
+      throw new RuntimeException("Unable to create cliente due to municipio. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    medidors = new ArrayList<Medidor>();
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetOne */
+  public Municipio getMunicipio()
+  {
+    return municipio;
+  }
+  /* Code from template association_GetMany */
+  public Medidor getMedidor(int index)
+  {
+    Medidor aMedidor = medidors.get(index);
+    return aMedidor;
+  }
+
+  public List<Medidor> getMedidors()
+  {
+    List<Medidor> newMedidors = Collections.unmodifiableList(medidors);
+    return newMedidors;
+  }
+
+  public int numberOfMedidors()
+  {
+    int number = medidors.size();
+    return number;
+  }
+
+  public boolean hasMedidors()
+  {
+    boolean has = medidors.size() > 0;
+    return has;
+  }
+
+  public int indexOfMedidor(Medidor aMedidor)
+  {
+    int index = medidors.indexOf(aMedidor);
+    return index;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setMunicipio(Municipio aMunicipio)
+  {
+    boolean wasSet = false;
+    if (aMunicipio == null)
+    {
+      return wasSet;
+    }
+
+    Municipio existingMunicipio = municipio;
+    municipio = aMunicipio;
+    if (existingMunicipio != null && !existingMunicipio.equals(aMunicipio))
+    {
+      existingMunicipio.removeCliente(this);
+    }
+    municipio.addCliente(this);
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfMedidors()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public Medidor addMedidor(string aMarca, string aDireccion, decimal aCosto)
+  {
+    return new Medidor(aMarca, aDireccion, aCosto, this);
+  }
+
+  public boolean addMedidor(Medidor aMedidor)
+  {
+    boolean wasAdded = false;
+    if (medidors.contains(aMedidor)) { return false; }
+    Cliente existingCliente = aMedidor.getCliente();
+    boolean isNewCliente = existingCliente != null && !this.equals(existingCliente);
+    if (isNewCliente)
+    {
+      aMedidor.setCliente(this);
+    }
+    else
+    {
+      medidors.add(aMedidor);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeMedidor(Medidor aMedidor)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aMedidor, as it must always have a cliente
+    if (!this.equals(aMedidor.getCliente()))
+    {
+      medidors.remove(aMedidor);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addMedidorAt(Medidor aMedidor, int index)
+  {  
+    boolean wasAdded = false;
+    if(addMedidor(aMedidor))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMedidors()) { index = numberOfMedidors() - 1; }
+      medidors.remove(aMedidor);
+      medidors.add(index, aMedidor);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveMedidorAt(Medidor aMedidor, int index)
+  {
+    boolean wasAdded = false;
+    if(medidors.contains(aMedidor))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfMedidors()) { index = numberOfMedidors() - 1; }
+      medidors.remove(aMedidor);
+      medidors.add(index, aMedidor);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addMedidorAt(aMedidor, index);
+    }
+    return wasAdded;
+  }
+
+  public void delete()
+  {
+    Municipio placeholderMunicipio = municipio;
+    this.municipio = null;
+    if(placeholderMunicipio != null)
+    {
+      placeholderMunicipio.removeCliente(this);
+    }
+    for(int i=medidors.size(); i > 0; i--)
+    {
+      Medidor aMedidor = medidors.get(i - 1);
+      aMedidor.delete();
+    }
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "municipio = "+(getMunicipio()!=null?Integer.toHexString(System.identityHashCode(getMunicipio())):"null");
+  }
+}

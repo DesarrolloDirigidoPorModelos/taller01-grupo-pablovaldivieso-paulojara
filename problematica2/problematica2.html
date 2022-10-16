@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problema2</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+    <h1>Problematica 02</h1>
+    <p>Para el festival de las Artes de la ciudad de Loja del presente año se necesita un sistema que administre los diversos actos públicos y privados. Un supervisor tendrá a su cargo 1 o muchos actos. Cada acto tendrá un nombre, lugar, fecha, costo total y una empresa que lo respalda.</p>
+    <div class="mermaid" style="text-align:center;margin-left:auto;margin-right:auto;">
+
+        classDiagram
+        
+        class Acto
+        Acto : +String nombre
+        Acto : +String lugar
+        Acto : +DateTime fecha
+        Acto : +Costo costo
+
+        class Empresa
+        Empresa : +String nombre
+        Empresa : +String identificacion
+        class Supervisor
+        Supervisor : +String identificacion
+
+        Supervisor "1" --> "*" Acto
+        Acto "1" --> "1" Empresa
+    </div>
+</body>
+</html>

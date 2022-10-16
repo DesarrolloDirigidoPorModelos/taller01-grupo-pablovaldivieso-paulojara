@@ -1,0 +1,518 @@
+//%% NEW FILE Supervisor BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+import java.util.*;
+
+// line 42 "model.ump"
+// line 85 "model.ump"
+public class Supervisor
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Supervisor Attributes
+  private string identificacion;
+
+  //Supervisor Associations
+  private List<Actos> actos;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Supervisor(string aIdentificacion)
+  {
+    identificacion = aIdentificacion;
+    actos = new ArrayList<Actos>();
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setIdentificacion(string aIdentificacion)
+  {
+    boolean wasSet = false;
+    identificacion = aIdentificacion;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getIdentificacion()
+  {
+    return identificacion;
+  }
+  /* Code from template association_GetMany */
+  public Actos getActo(int index)
+  {
+    Actos aActo = actos.get(index);
+    return aActo;
+  }
+
+  public List<Actos> getActos()
+  {
+    List<Actos> newActos = Collections.unmodifiableList(actos);
+    return newActos;
+  }
+
+  public int numberOfActos()
+  {
+    int number = actos.size();
+    return number;
+  }
+
+  public boolean hasActos()
+  {
+    boolean has = actos.size() > 0;
+    return has;
+  }
+
+  public int indexOfActo(Actos aActo)
+  {
+    int index = actos.indexOf(aActo);
+    return index;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfActos()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public Actos addActo(string aNombre, string aLugar, datetime aFecha, decimal aCosto, Empresa aEmpresa)
+  {
+    return new Actos(aNombre, aLugar, aFecha, aCosto, this, aEmpresa);
+  }
+
+  public boolean addActo(Actos aActo)
+  {
+    boolean wasAdded = false;
+    if (actos.contains(aActo)) { return false; }
+    Supervisor existingSupervisor = aActo.getSupervisor();
+    boolean isNewSupervisor = existingSupervisor != null && !this.equals(existingSupervisor);
+    if (isNewSupervisor)
+    {
+      aActo.setSupervisor(this);
+    }
+    else
+    {
+      actos.add(aActo);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeActo(Actos aActo)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aActo, as it must always have a supervisor
+    if (!this.equals(aActo.getSupervisor()))
+    {
+      actos.remove(aActo);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addActoAt(Actos aActo, int index)
+  {  
+    boolean wasAdded = false;
+    if(addActo(aActo))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfActos()) { index = numberOfActos() - 1; }
+      actos.remove(aActo);
+      actos.add(index, aActo);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveActoAt(Actos aActo, int index)
+  {
+    boolean wasAdded = false;
+    if(actos.contains(aActo))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfActos()) { index = numberOfActos() - 1; }
+      actos.remove(aActo);
+      actos.add(index, aActo);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addActoAt(aActo, index);
+    }
+    return wasAdded;
+  }
+
+  public void delete()
+  {
+    for(int i=actos.size(); i > 0; i--)
+    {
+      Actos aActo = actos.get(i - 1);
+      aActo.delete();
+    }
+  }
+
+  // line 46 "model.ump"
+   public void SetIdentificacion(string iden){
+    identificacion = iden;
+  }
+
+  // line 50 "model.ump"
+   public string GetIdentificacion(){
+    return identificacion;
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "identificacion" + "=" + (getIdentificacion() != null ? !getIdentificacion().equals(this)  ? getIdentificacion().toString().replaceAll("  ","    ") : "this" : "null");
+  }
+}
+
+
+
+//%% NEW FILE Actos BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+
+// line 2 "model.ump"
+// line 79 "model.ump"
+public class Actos
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Actos Attributes
+  private string nombre;
+  private string lugar;
+  private datetime fecha;
+  private decimal costo;
+
+  //Actos Associations
+  private Supervisor supervisor;
+  private Empresa empresa;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Actos(string aNombre, string aLugar, datetime aFecha, decimal aCosto, Supervisor aSupervisor, Empresa aEmpresa)
+  {
+    nombre = aNombre;
+    lugar = aLugar;
+    fecha = aFecha;
+    costo = aCosto;
+    boolean didAddSupervisor = setSupervisor(aSupervisor);
+    if (!didAddSupervisor)
+    {
+      throw new RuntimeException("Unable to create acto due to supervisor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    if (aEmpresa == null || aEmpresa.getActos() != null)
+    {
+      throw new RuntimeException("Unable to create Actos due to aEmpresa. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empresa = aEmpresa;
+  }
+
+  public Actos(string aNombre, string aLugar, datetime aFecha, decimal aCosto, Supervisor aSupervisor, string aIdentificacionForEmpresa, string aNombreForEmpresa)
+  {
+    nombre = aNombre;
+    lugar = aLugar;
+    fecha = aFecha;
+    costo = aCosto;
+    boolean didAddSupervisor = setSupervisor(aSupervisor);
+    if (!didAddSupervisor)
+    {
+      throw new RuntimeException("Unable to create acto due to supervisor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    empresa = new Empresa(aIdentificacionForEmpresa, aNombreForEmpresa, this);
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setLugar(string aLugar)
+  {
+    boolean wasSet = false;
+    lugar = aLugar;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setFecha(datetime aFecha)
+  {
+    boolean wasSet = false;
+    fecha = aFecha;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setCosto(decimal aCosto)
+  {
+    boolean wasSet = false;
+    costo = aCosto;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+
+  public string getLugar()
+  {
+    return lugar;
+  }
+
+  public datetime getFecha()
+  {
+    return fecha;
+  }
+
+  public decimal getCosto()
+  {
+    return costo;
+  }
+  /* Code from template association_GetOne */
+  public Supervisor getSupervisor()
+  {
+    return supervisor;
+  }
+  /* Code from template association_GetOne */
+  public Empresa getEmpresa()
+  {
+    return empresa;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setSupervisor(Supervisor aSupervisor)
+  {
+    boolean wasSet = false;
+    if (aSupervisor == null)
+    {
+      return wasSet;
+    }
+
+    Supervisor existingSupervisor = supervisor;
+    supervisor = aSupervisor;
+    if (existingSupervisor != null && !existingSupervisor.equals(aSupervisor))
+    {
+      existingSupervisor.removeActo(this);
+    }
+    supervisor.addActo(this);
+    wasSet = true;
+    return wasSet;
+  }
+
+  public void delete()
+  {
+    Supervisor placeholderSupervisor = supervisor;
+    this.supervisor = null;
+    if(placeholderSupervisor != null)
+    {
+      placeholderSupervisor.removeActo(this);
+    }
+    Empresa existingEmpresa = empresa;
+    empresa = null;
+    if (existingEmpresa != null)
+    {
+      existingEmpresa.delete();
+    }
+  }
+
+  // line 10 "model.ump"
+   public string GetNombre(){
+    return nombre;
+  }
+
+  // line 13 "model.ump"
+   public string GetLugar(){
+    return lugar;
+  }
+
+  // line 16 "model.ump"
+   public datetime GetFecha(){
+    return fecha;
+  }
+
+  // line 19 "model.ump"
+   public decimal GetCosto(){
+    return costo;
+  }
+
+  // line 23 "model.ump"
+   public void SetNombre(string name){
+    nombre = name;
+  }
+
+  // line 26 "model.ump"
+   public void SetLugar(string place){
+    lugar = place;
+  }
+
+  // line 29 "model.ump"
+   public void SetFecha(datetime date){
+    fecha = date;
+  }
+
+  // line 32 "model.ump"
+   public void SetCosto(decimal total){
+    costo = total;
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "lugar" + "=" + (getLugar() != null ? !getLugar().equals(this)  ? getLugar().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "fecha" + "=" + (getFecha() != null ? !getFecha().equals(this)  ? getFecha().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "costo" + "=" + (getCosto() != null ? !getCosto().equals(this)  ? getCosto().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "supervisor = "+(getSupervisor()!=null?Integer.toHexString(System.identityHashCode(getSupervisor())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "empresa = "+(getEmpresa()!=null?Integer.toHexString(System.identityHashCode(getEmpresa())):"null");
+  }
+}
+
+
+
+//%% NEW FILE Empresa BEGINS HERE %%
+
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
+
+
+
+// line 54 "model.ump"
+// line 90 "model.ump"
+public class Empresa
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Empresa Attributes
+  private string identificacion;
+  private string nombre;
+
+  //Empresa Associations
+  private Actos actos;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Empresa(string aIdentificacion, string aNombre, Actos aActos)
+  {
+    identificacion = aIdentificacion;
+    nombre = aNombre;
+    if (aActos == null || aActos.getEmpresa() != null)
+    {
+      throw new RuntimeException("Unable to create Empresa due to aActos. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    actos = aActos;
+  }
+
+  public Empresa(string aIdentificacion, string aNombre, string aNombreForActos, string aLugarForActos, datetime aFechaForActos, decimal aCostoForActos, Supervisor aSupervisorForActos)
+  {
+    identificacion = aIdentificacion;
+    nombre = aNombre;
+    actos = new Actos(aNombreForActos, aLugarForActos, aFechaForActos, aCostoForActos, aSupervisorForActos, this);
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setIdentificacion(string aIdentificacion)
+  {
+    boolean wasSet = false;
+    identificacion = aIdentificacion;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setNombre(string aNombre)
+  {
+    boolean wasSet = false;
+    nombre = aNombre;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public string getIdentificacion()
+  {
+    return identificacion;
+  }
+
+  public string getNombre()
+  {
+    return nombre;
+  }
+  /* Code from template association_GetOne */
+  public Actos getActos()
+  {
+    return actos;
+  }
+
+  public void delete()
+  {
+    Actos existingActos = actos;
+    actos = null;
+    if (existingActos != null)
+    {
+      existingActos.delete();
+    }
+  }
+
+  // line 60 "model.ump"
+   public void SetIdentificacion(string iden){
+    identificacion = iden;
+  }
+
+  // line 64 "model.ump"
+   public string GetIdentificacion(){
+    return identificacion;
+  }
+
+  // line 68 "model.ump"
+   public string GetNombre(){
+    return nombre;
+  }
+
+  // line 72 "model.ump"
+   public void SetNombre(string name){
+    nombre = name;
+  }
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "identificacion" + "=" + (getIdentificacion() != null ? !getIdentificacion().equals(this)  ? getIdentificacion().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "nombre" + "=" + (getNombre() != null ? !getNombre().equals(this)  ? getNombre().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "actos = "+(getActos()!=null?Integer.toHexString(System.identityHashCode(getActos())):"null");
+  }
+}
